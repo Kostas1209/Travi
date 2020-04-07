@@ -9,6 +9,7 @@ import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { monthNames } from '../../shared/Constants';
 import DateRangePicker from '../../../../services/DateRangePicker';
+import PushNotification from "react-native-push-notification";
 
 
 interface Props{
@@ -35,6 +36,45 @@ const INITIAL_STATE: State = {
 class ChangeDate extends React.Component<Props, State>
 {
     state=INITIAL_STATE
+
+    constructor(props: any)
+    {
+        super(props)
+        PushNotification.configure({
+            onRegister: function(token) {
+              console.log("TOKEN:", token);
+            },
+            onNotification: function(notification) {
+              console.log("NOTIFICATION:", notification);
+             // notification.finish(PushNotificationIOS.FetchResult.NoData);
+            },
+           // senderID: "YOUR GCM (OR FCM) SENDER ID",
+            permissions: {
+              alert: true,
+              badge: true,
+              sound: true
+            },
+            popInitialNotification: true,
+            requestPermissions: true
+          });
+    }
+
+    testPush = () =>
+    {
+        PushNotification.localNotification({
+            title: "My Notification Title", // (optional)
+            message: "My Notification Message", // (required)
+        });
+    }
+
+    schedulPush = () => {
+        PushNotification.localNotificationSchedule({
+            //... You can use all the options from localNotifications
+            message: "My Notification Message", // (required)
+            date: new Date(Date.now() + 30 * 1000) // in 60 secs
+        });
+    }
+    
     ChangeDate = async (): Promise<Date> => 
     {
         try {
@@ -58,6 +98,14 @@ class ChangeDate extends React.Component<Props, State>
         return(
             <View>
                 <HeaderComponent navigation={this.props.navigation} />
+                <PaperButton
+                    onPress={()=>{
+                        this.schedulPush()
+                        this.testPush()
+                    }}
+                >
+                    Notification
+                </PaperButton>
                 <View>
                     <Text style={styles.Text}>{this.props.route.params.town}</Text>
                     <TouchableOpacity
