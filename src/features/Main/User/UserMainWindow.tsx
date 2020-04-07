@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {Button as PaperButton, Avatar} from 'react-native-paper';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, PermissionsAndroid } from 'react-native';
 import HeaderComponent from '../shared/Header';
 import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 import { User } from '../../../types/User';
 import { SaveAvatar } from '../../../redux/User/actions';
 import { AnyAction } from 'redux';
-//import * as ImagePicker from 'expo-image-picker';
+import ImagePicker  from 'react-native-image-picker';
 
 interface Props{
     navigation: any,
@@ -17,25 +17,38 @@ interface Props{
 
 class MainWindowComponent extends React.Component<Props>
 {
-    // _pickImage = async () => {
-    //     let isAllowAccess = await ImagePicker.requestCameraRollPermissionsAsync()
-    //     if(isAllowAccess.granted)
-    //     {
-    //         let result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.All,
-    //         allowsEditing: true,
-    //         aspect: [4, 3],
-    //         quality: 1
-    //         });
-    //         console.log("image  " + result);
-    //         if (!result.cancelled) {
-    //             this.props.saveUserAvatar(result.uri);
-    //         }
-    //     }
-    //     else{
-    //         alert("We need permission for accessing to your memory")
-    //     }
-    // }
+    _pickImage = async () => {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            {
+                title: "Travi Нужен доступ к вашим файлам",
+                message:
+                  "Travi пытается получить фото с вашей галереи",
+                buttonNegative: "Отказать",
+                buttonPositive: "OK"
+            })
+        if(granted === PermissionsAndroid.RESULTS.GRANTED)
+        {
+            ImagePicker.showImagePicker({}, (response) => {
+                console.log('Response = ', response);
+            
+                if (response.didCancel) {
+                console.log('User cancelled image picker');
+                } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+                } else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+                } else {
+                console.log(response);
+            
+                // You can also display the image using data:
+                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+            
+                this.props.saveUserAvatar(response.uri as string)
+                }
+            });
+        }
+    }
 
     render()
     {
@@ -44,13 +57,13 @@ class MainWindowComponent extends React.Component<Props>
                 <HeaderComponent 
                     navigation={this.props.navigation}
                 />
-                {/* <TouchableOpacity onPress={this._pickImage}>
+                <TouchableOpacity onPress={this._pickImage}>
                     {
                         this.props.user.imagePath ? 
                         <Avatar.Image style={{alignSelf: "center"}} size={180} source={{uri: this.props.user.imagePath}} />
                         : <Avatar.Text style={{alignSelf: "center"}} size={180} label={this.props.user.name[0] + this.props.user.lastName[0]} />
                     }
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 <Text style={{alignSelf: "center"}}>Привет, {this.props.user.name}!</Text>
                 <PaperButton onPress={()=>this.props.navigation.navigate("UserInfo")}>User Info</PaperButton>
                 <PaperButton onPress={()=>this.props.navigation.navigate("UserDocument")}>User Document</PaperButton>
