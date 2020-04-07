@@ -8,7 +8,7 @@ import environment from "../../../../../environment";
 import HeaderComponent from '../../shared/Header';
 import { IGeolocation, IRegion } from '../../../../types/Travelling';
 
-const {GOOGLE_API_KEY} = environment();
+const {GOOGLE_API_KEY} = environment.dev;
 
 
 interface MapState{

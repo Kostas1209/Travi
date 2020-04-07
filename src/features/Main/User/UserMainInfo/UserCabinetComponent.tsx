@@ -15,7 +15,7 @@ import { monthNames } from '../../shared/Constants';
 
 
 
-const {GOOGLE_API_KEY} = getEnvVars();
+const {GOOGLE_API_KEY} = getEnvVars.dev;
 
 interface UserCabinetProps{
     navigation: any,

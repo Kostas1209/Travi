@@ -47,7 +47,7 @@ const mapStateToProps = (state: RootState) => ({
 class HeaderComponent extends React.Component<{navigation, user: User}> 
 {
     state = {
-        fontIsLoading: false
+        fontIsLoading: true
     }
     // async componentDidMount() {
     //     await Font.loadAsync({
