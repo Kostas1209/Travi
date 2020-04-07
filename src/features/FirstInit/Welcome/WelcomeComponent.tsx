@@ -6,20 +6,6 @@ import { IconButton, Colors } from 'react-native-paper';
 
 export class WelcomeComponent extends React.Component<{navigation}> {
 
-    state = {
-        fontIsLoading: true
-    }
-
-    // async componentDidMount() {
-    //     await Font.loadAsync({
-    //         'Darkline': require('../../../../assets/fonts/Darkline.ttf'),
-    //       })
-    //     Font.loadAsync({
-    //       'Nautilus': require('../../../../assets/fonts/Nautilus.otf'),
-    //     }).then(()=> this.setState({fontIsLoading : true}))
-       
-    //   }
-
     render(){
         return(
             <View>
@@ -27,16 +13,13 @@ export class WelcomeComponent extends React.Component<{navigation}> {
                     style={{width:"100%",height: '100%'}}
                     source={require("../../../../assets/a.png") }
                 >
-                    {
-                        this.state.fontIsLoading ? <Text style={styles.logoText}>Travi</Text> : null
-                    }
-                     {
-                        this.state.fontIsLoading ? <Text style={[styles.welcomeText]}>
+                    <Text style={styles.logoText}>Travi</Text>
+                    <Text style={[styles.welcomeText]}>
                         Добро пожаловать!{"\n"}
                         Это - твой личный помощник в организации путешествий.{"\n"}
                         Для начала заполним немного информации.{"\n"}
                         Let's start!
-                    </Text> : null
+                    </Text>
                     }
                     
                     <IconButton

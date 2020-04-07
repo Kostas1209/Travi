@@ -1,10 +1,9 @@
 import { StyleSheet } from 'react-native'
 import { Colors } from 'react-native-paper';
-import { colors } from 'react-native-elements';
 
 const styles = StyleSheet.create ({
     logoText:{
-        //fontFamily: "Darkline",
+        fontFamily: "Darkline",
         position: "absolute",
         top: "13%",
         alignSelf: "center",

@@ -1,4 +1,5 @@
 {
   "name": "Travi",
-  "displayName": "Travi"
+  "displayName": "Travi",
+  "assets": ".assets/fonts"
 }
