@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { monthNames } from "../Constants";
 import { Button as PaperButton, Colors, IconButton } from 'react-native-paper';
-import { View, Text, TimePickerAndroid, Button, TextInput, Linking, KeyboardAvoidingView, Dimensions, Animated} from "react-native";
+import { View, Text, TimePickerAndroid, Button, TextInput, KeyboardAvoidingView, Animated} from "react-native";
 import  DatePickerAndroid  from '@react-native-community/datetimepicker'
 import { AnyAction } from 'redux';
-//import * as DocumentPicker from 'expo-document-picker';
+import FilePickerManager from 'react-native-file-picker';
 import { deleteTravelling, createTravelling } from '../../../../redux/Travelling/actions';
 import { connect } from 'react-redux';
 import  HeaderComponent  from '../Header';
@@ -12,6 +12,7 @@ import { Travelling, Time } from '../../../../types/Travelling';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { styles } from './TravelStyle';
 import DateRangePicker from '../../../../services/DateRangePicker';
+import FileViewer from 'react-native-file-viewer';
 
 
 export const TravellComponentOverview = ({travelling, index}) => 
@@ -88,18 +89,6 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
             console.log("Error " + message);
         }
     }
-
-    // selectDocument = async () => {
-    //     try{
-    //         const res = await DocumentPicker.getDocumentAsync({type: "application/pdf",copyToCacheDirectory: true, multiple: true})
-    //         console.log(res);
-    //         return res.uri;
-    //     }
-    //     catch(err)
-    //     {
-    //         console.log(err);
-    //     }
-    // }
 
     fadeOutDialog = () => {
         // Will change fadeAnim value to 0 in 5 seconds
@@ -235,28 +224,47 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                         />
                     </TouchableOpacity>
                 </View>
-                {/* <View>
+                <View style={{flexDirection: "row"}}>
                     <TouchableOpacity onPress={()=>{
-                        Linking.openURL(this.state.travelling.pathToArriveBoardingPass);
+                        if(this.state.travelling.pathToArriveBoardingPass)
+                        {
+                            FileViewer.open(this.state.travelling.pathToArriveBoardingPass)
+                        }
                     }}>
                         <Text>Посадочный билет туда</Text>
                         {
                             this.state.travelling.pathToArriveBoardingPass !== undefined ? 
-                            <Text >{this.state.travelling.pathToArriveBoardingPass }</Text>
+                            <Text >Нажмите,чтобы открыть</Text>
                             :
-                            <Text>Не выбран</Text>
+                            <Text>
+                                Не выбрано
+                            </Text>
                         }
                     </TouchableOpacity>
-                    <Button 
-                        title="Выбрать посадочный билет туда"
-                        onPress={()=>{this.selectDocument().then((path: string) => {
-                            let newTravelling = Object.assign({}, this.state.travelling);
-                            newTravelling.pathToArriveBoardingPass = path;
-                            this.setState({travelling: newTravelling});
-                        })}}
+                    <IconButton
+                        icon="file"
+                        onPress={()=>{
+                            FilePickerManager.showFilePicker(null,
+                                (response) => {
+                                    console.log('Response = ', response);
+                                
+                                    if (response.didCancel) {
+                                    console.log('User cancelled file picker');
+                                    }
+                                    else if (response.error) {
+                                    console.log('FilePickerManager Error: ', response.error);
+                                    }
+                                    else {
+                                        console.log(response)
+                                        let newTravelling = Object.assign({}, this.state.travelling);
+                                        newTravelling.pathToArriveBoardingPass = response.uri
+                                        this.setState({travelling: newTravelling});
+                                    }
+                                })
+                        }}
                     />
                 </View>
-                <View>
+                {/* <View>
                     <Text>Посадочный билет обратно</Text>
                     {
                         this.state.travelling.pathToComeBoardingPass !== undefined ? 
