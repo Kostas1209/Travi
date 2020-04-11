@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { monthNames } from "../Constants";
 import { Button as PaperButton, Colors, IconButton } from 'react-native-paper';
-import { View, Text, TimePickerAndroid, Button, TextInput, KeyboardAvoidingView, Animated} from "react-native";
+import { View, Text, TimePickerAndroid, Button, TextInput, KeyboardAvoidingView, Animated, TouchableWithoutFeedbackBase} from "react-native";
 import  DatePickerAndroid  from '@react-native-community/datetimepicker'
 import { AnyAction } from 'redux';
 import FilePickerManager from 'react-native-file-picker';
@@ -40,7 +40,9 @@ interface State{
     travelling: Travelling,
     index: number
     calendarIsOpen: boolean,
-    fadeAnim : Animated.Value
+    fadeAnim : Animated.Value,
+    arriveTimePickerIsOpen: boolean,
+    comeTimePickerIsOpen : boolean 
 }
 
 export class TravellComponentFullInfo extends React.Component<Props, State> 
@@ -49,7 +51,9 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
         travelling: this.props.route.params.travelling,
         index: this.props.route.params.index,
         calendarIsOpen : false,
-        fadeAnim : new Animated.Value(0)
+        fadeAnim : new Animated.Value(0),
+        arriveTimePickerIsOpen: false,
+        comeTimePickerIsOpen: false
     }
 
     selectDate = async (): Promise<Date | null>=> 
@@ -70,25 +74,6 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
             console.warn('Cannot open date picker', message);
           }
     } 
-
-    selectTime = async () : Promise<Time> => {
-        try{
-            const {action, hour, minute} = await TimePickerAndroid.open({
-                hour: 14,
-                minute: 0,
-                is24Hour: true,
-                mode: "default"
-            })
-            if(action !== TimePickerAndroid.dismissedAction)
-            {
-                return {hour,minute}
-            }
-        }
-        catch(message)
-        {
-            console.log("Error " + message);
-        }
-    }
 
     fadeOutDialog = () => {
         // Will change fadeAnim value to 0 in 5 seconds
@@ -172,17 +157,23 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                     <Text style={{alignSelf: "center"}}>Указать время прибытия</Text>
                     <TouchableOpacity style={styles.container}
                         onPress={()=>{
-                            this.selectTime()
-                            .then((time: Time) => {
-                                let newTravelling = Object.assign({}, this.state.travelling); 
-                                newTravelling.flightArriveTime = time;
-                                newTravelling.arriveDate.setHours(time.hour);
-                                newTravelling.arriveDate.setMinutes(time.minute);
-                                this.setState({travelling: newTravelling});
-                            })
+                            this.setState({arriveTimePickerIsOpen : true})
                         }}
                     >
                         <View>
+                            {
+                                this.state.arriveTimePickerIsOpen &&
+                                <DatePickerAndroid 
+                                value={new Date()}
+                                mode="time" 
+                                onChange={(event, date: Date)=>{
+                                    this.setState({arriveTimePickerIsOpen : false})
+                                    let newTravelling = Object.assign({},this.state.travelling);
+                                    newTravelling.flightArriveTime = {hour: date.getHours(), minute: date.getMinutes()}
+                                    newTravelling.arriveDate.setTime(date.getTime())
+                                    this.setState({travelling: newTravelling});
+                                }}/>
+                            }
                             {
                                 this.state.travelling.flightArriveTime == undefined ?
                                 <Text style={styles.text}>Не выбрано</Text> :
@@ -200,17 +191,22 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                     <Text style={{alignSelf: "center"}}>Указать время возвращения</Text>
                     <TouchableOpacity style={styles.container}
                         onPress={()=>{
-                            this.selectTime()
-                            .then((time: Time) => {
-                               // console.log(time)
-                                let newTravelling = Object.assign({}, this.state.travelling); 
-                                newTravelling.flightComeTime = time;
-                                newTravelling.comeDate.setHours(time.hour);
-                                newTravelling.comeDate.setMinutes(time.minute);
-                                this.setState({travelling: newTravelling});
-                            })
+                            this.setState({comeTimePickerIsOpen : true})
                         }}
                     >
+                        {
+                            this.state.comeTimePickerIsOpen &&
+                             <DatePickerAndroid 
+                                value={new Date()}
+                                mode="time" 
+                                onChange={(event, date: Date)=>{
+                                    this.setState({comeTimePickerIsOpen : false})
+                                    let newTravelling = Object.assign({},this.state.travelling);
+                                    newTravelling.flightComeTime = {hour: date.getHours(), minute: date.getMinutes()}
+                                    newTravelling.comeDate.setTime(date.getTime())
+                                    this.setState({travelling: newTravelling});
+                            }}/>
+                        }
                         {
                             this.state.travelling.flightComeTime == undefined ?
                             <Text style={styles.text}>Не выбрано</Text> :
