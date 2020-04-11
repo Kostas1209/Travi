@@ -77,7 +77,7 @@ class HeaderComponent extends React.Component<{navigation, user: User}>
                             }
                             </TouchableOpacity>
                         }
-                        containerStyle={{backgroundColor: "#750575"}}
+                        containerStyle={{paddingTop: 0 ,height: 60,backgroundColor: "#750575"}}
                     /> : null
                 }
             </View>
