@@ -70,7 +70,7 @@ class ChangeDate extends React.Component<Props, State>
     schedulPush = () => {
         PushNotification.localNotificationSchedule({
             //... You can use all the options from localNotifications
-            message: "My Notification Message", // (required)
+            message: "My schedull notification message", // (required)
             date: new Date(Date.now() + 30 * 1000) // in 60 secs
         });
     }

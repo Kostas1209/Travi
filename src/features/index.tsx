@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { FirstInit } from './FirstInit/FirstInitComponent';
 import { RootState } from '../redux/rootReducer';
 import Main from './Main/MainComponent';
+import  Splash  from './Splash';
 
 interface RootProps{
     navigation: any,
@@ -15,10 +16,9 @@ class Root extends React.Component<RootProps>
 { 
     render(){
         const Stack = createStackNavigator();
-        let initialRoute = this.props.isUserInit ? "Main" : "FirstInit";
         return(
             <NavigationContainer>
-                <Stack.Navigator initialRouteName={initialRoute}>
+                <Stack.Navigator initialRouteName={"Splash"}>
                     <Stack.Screen name="Main" component = {Main} options={{ 
                         cardStyle:{backgroundColor: 'transparent', shadowColor: 'transparent'},
                         title: 'Travello',
@@ -28,7 +28,12 @@ class Root extends React.Component<RootProps>
                         cardStyle:{backgroundColor: 'transparent', shadowColor: 'transparent'},
                         title: 'first init', 
                         headerShown: false, 
-                        headerLeft: null}}/>         
+                        headerLeft: null}}/> 
+                    <Stack.Screen name="Splash" component = {Splash} options={{ 
+                        cardStyle:{backgroundColor: 'transparent', shadowColor: 'transparent'},
+                        title: 'Travello',
+                        headerShown: false,  
+                        headerLeft: null }} />        
                 </Stack.Navigator>
             </NavigationContainer>
         )
