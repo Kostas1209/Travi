@@ -15,9 +15,11 @@ const styles = StyleSheet.create ({
     },
     container:{
         width: "70%",
-        position: "absolute",
+        position: "relative",
         top: "30%",
-        alignSelf: "center"
+        alignSelf: "center",
+        justifyContent: "flex-end",
+        paddingBottom : "20%"
     },
     button:{
         width: "50%",

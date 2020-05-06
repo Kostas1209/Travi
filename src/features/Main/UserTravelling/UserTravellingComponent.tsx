@@ -19,7 +19,10 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
 {
     const date = new Date();
 
-    const initialLayout = { width: Dimensions.get('window').width + 200 };
+    const initialLayout = { 
+        width: Dimensions.get('screen').width, 
+        heigth: Dimensions.get('screen').height - 100
+    };
     
     const [index, setIndex] = React.useState(0);
     
@@ -33,7 +36,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
     const accordionContent = ( exprassion : (arrive: Date, come: Date , now: Date) => boolean )=>
       {
           return(
-              <View>
+              <View style={{height: "100%"}}>
                   {
                       userTravelling.length > 0 ? 
                       userTravelling.map((travelling: Travelling, index : number) => 
@@ -57,7 +60,12 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
                           }
                       }) 
                       :
-                      <Text>Not</Text>
+                      <Text style={{
+                          alignSelf: "center",
+                          paddingTop: "50%",
+                          fontSize: 30,
+                          color: Colors.black
+                        }}>Нет путешествий</Text>
                   }
               </View>
           )
@@ -90,7 +98,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
           indicatorStyle={{ backgroundColor: Colors.purple100 }}
           style={{ backgroundColor: Colors.purple400}}
           renderLabel={({ route, focused, color }) => (
-            <Text style={{ color, fontSize: 15 }}>
+            <Text style={{height: "100%", color, fontSize: 15 }}>
               {route.title}
             </Text>
           )}
@@ -108,6 +116,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
             <View>
                 <HeaderComponent navigation={navigation} />
                 <TabView
+                    sceneContainerStyle={{height: initialLayout.heigth, width: initialLayout.width}}
                     renderTabBar={renderTabBar}
                     swipeVelocityImpact={0.5}
                     lazy={true}

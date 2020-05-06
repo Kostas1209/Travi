@@ -45,10 +45,9 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
     render()
     {
         return(
-            <KeyboardAvoidingView behavior="height" enabled>
                 <ImageBackground
-                style={{width:"100%",height: '100%'}}
-                source={require("../../../../assets/a.png")}
+                    style={{flex:1}}
+                    source={require("../../../../assets/a.png")}
                 >
                     <View style={styles.container}>
                         <Text style={styles.logoText}>Travi</Text>
@@ -112,7 +111,6 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
                         </Formik>
                     </View>
                 </ImageBackground>
-            </KeyboardAvoidingView>
         )
     }
 }

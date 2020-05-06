@@ -15,34 +15,37 @@ export class Splash extends React.Component<SplashProps>{
         fadeAnim : new Animated.Value(0),
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.fadeOutDialog();
         setTimeout(() => {
             let initialRoute = this.props.isUserInit ? "Main" : "FirstInit";
             this.props.navigation.navigate(initialRoute)
-        }, 10000);
+        }, 3500);
     }
     
     fadeOutDialog = () => {
 
         Animated.timing(this.state.fadeAnim, {
             toValue: 1,
-            duration: 5000
+            duration: 3000
         }).start()
     };
 
     render(){
         return (
-            <View style={{flex: 1, backgroundColor: Colors.pink100}}>
+            <ImageBackground
+                    style={{width:"100%",height: '100%'}}
+                    source={require("../../assets/a.png") }
+                >
                 <Animated.View style = {{top: "30%", opacity: this.state.fadeAnim}}>
                     <Text style={{
                         fontFamily: "Darkline",
                         alignSelf: "center",
                         fontSize: 150,
-                        color: Colors.purple700}}
+                        color: Colors.pink100}}
                     >Travi</Text>
                 </Animated.View>
-            </View>
+            </ImageBackground>
         );
     }
 }

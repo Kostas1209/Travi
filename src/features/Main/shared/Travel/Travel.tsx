@@ -167,10 +167,11 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                                 value={new Date()}
                                 mode="time" 
                                 onChange={(event, date: Date)=>{
-                                    this.setState({arriveTimePickerIsOpen : false})
+                                    this.setState({arriveTimePickerIsOpen : false}) 
                                     let newTravelling = Object.assign({},this.state.travelling);
                                     newTravelling.flightArriveTime = {hour: date.getHours(), minute: date.getMinutes()}
-                                    newTravelling.arriveDate.setTime(date.getTime())
+                                    newTravelling.arriveDate.setHours(date.getHours())
+                                    newTravelling.arriveDate.setMinutes(date.getMinutes())
                                     this.setState({travelling: newTravelling});
                                 }}/>
                             }
@@ -203,7 +204,8 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                                     this.setState({comeTimePickerIsOpen : false})
                                     let newTravelling = Object.assign({},this.state.travelling);
                                     newTravelling.flightComeTime = {hour: date.getHours(), minute: date.getMinutes()}
-                                    newTravelling.comeDate.setTime(date.getTime())
+                                    newTravelling.comeDate.setHours(date.getHours());
+                                    newTravelling.comeDate.setMinutes(date.getMinutes());
                                     this.setState({travelling: newTravelling});
                             }}/>
                         }

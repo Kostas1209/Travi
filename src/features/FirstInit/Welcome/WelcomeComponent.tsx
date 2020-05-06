@@ -20,7 +20,6 @@ export class WelcomeComponent extends React.Component<{navigation}> {
                         Для начала заполним немного информации.{"\n"}
                         Let's start!
                     </Text>
-                    }
                     
                     <IconButton
                     style={styles.button}

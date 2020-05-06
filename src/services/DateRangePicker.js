@@ -39,7 +39,9 @@ export default class DateRangePicker extends Component<Props> {
   setupMarkedDates = (fromDate, toDate, markedDates) => {
     let mFromDate = new XDate(fromDate)
     let mToDate = new XDate(toDate)
-    let range = mFromDate.diffDays(mToDate)
+    console.log((mToDate - mFromDate) / (1000 * 60 * 60 * 24));
+    let range = mFromDate.diffDays(mToDate) /// Bug Range not integer
+    console.log(range);
     if (range >= 0) {
       if (range == 0) {
         markedDates = {[toDate]: {color: this.props.theme.edgeColor, textColor: this.props.theme.markTextColor}}
@@ -50,6 +52,7 @@ export default class DateRangePicker extends Component<Props> {
           if(i < range) {
             markedDates[tempDate] = {color: this.props.theme.markColor, textColor: this.props.theme.markTextColor}
           } else {
+            console.log(tempDate);
             markedDates[tempDate] = {endingDay: true, color: this.props.theme.edgeColor, textColor: this.props.theme.markTextColor}
           }
         }
