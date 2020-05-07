@@ -37,9 +37,8 @@ export default class DateRangePicker extends Component<Props> {
   }
 
   setupMarkedDates = (fromDate, toDate, markedDates) => {
-    let mFromDate = new XDate(fromDate)
-    let mToDate = new XDate(toDate)
-    console.log((mToDate - mFromDate) / (1000 * 60 * 60 * 24));
+    let mFromDate = new XDate(fromDate.getFullYear(), fromDate.getMonth(),fromDate.getDate())
+    let mToDate = new XDate(toDate.getFullYear(), toDate.getMonth(),toDate.getDate())
     let range = mFromDate.diffDays(mToDate) /// Bug Range not integer
     console.log(range);
     if (range >= 0) {

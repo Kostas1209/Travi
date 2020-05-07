@@ -124,7 +124,7 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                 >
                     {
                         this.state.travelling.arriveDate !== undefined?
-                        <Text style={[styles.text, {top: 8}]}>
+                        <Text style={[styles.text]}>
                              {this.state.travelling.arriveDate.getDate() + "\t" + 
                             monthNames[this.state.travelling.arriveDate.getMonth()] + "\t" +this.state.travelling.arriveDate.getFullYear()} -
                             {"\t" + this.state.travelling.comeDate.getDate() + "\t" + 
@@ -134,7 +134,7 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                         <Text style={styles.text}>Не указан</Text>
                     }
                     <IconButton icon="calendar"
-                                            style={{position:"absolute", top: "0%", width:"180%"  }}
+                                            style={{position:"absolute", top: "0%", width:"187%"  }}
                                             color={Colors.purple700}
                                         />
                 </TouchableOpacity>
@@ -160,7 +160,6 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                             this.setState({arriveTimePickerIsOpen : true})
                         }}
                     >
-                        <View>
                             {
                                 this.state.arriveTimePickerIsOpen &&
                                 <DatePickerAndroid 
@@ -179,13 +178,12 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                                 this.state.travelling.flightArriveTime == undefined ?
                                 <Text style={styles.text}>Не выбрано</Text> :
                                 <Text>{this.state.travelling.flightArriveTime.hour < 10 ? "0": ""}{this.state.travelling.flightArriveTime.hour + "\t"} 
-                                    :{this.state.travelling.flightArriveTime.minute < 10 ? " 0":""}{this.state.travelling.flightArriveTime.minute}</Text> 
+                                    : {this.state.travelling.flightArriveTime.minute < 10 ? " 0":""}{this.state.travelling.flightArriveTime.minute}</Text> 
                             }
                             <IconButton icon="clock-outline"
-                                style={{position:"absolute", top: "0%", width:"180%"  }}
+                                style={{position:"absolute", width:"187%"  }}
                                 color={Colors.purple700}
                             />
-                        </View>
                     </TouchableOpacity>
                 </View>
                 <View style={{marginTop: 15}}>
@@ -213,73 +211,103 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                             this.state.travelling.flightComeTime == undefined ?
                             <Text style={styles.text}>Не выбрано</Text> :
                             <Text>{this.state.travelling.flightComeTime.hour < 10 ? "0": ""}{this.state.travelling.flightComeTime.hour + "\t"} 
-                                :{this.state.travelling.flightComeTime.minute < 10 ? " 0":""}{this.state.travelling.flightComeTime.minute}</Text> 
+                                : {this.state.travelling.flightComeTime.minute < 10 ? " 0":""}{this.state.travelling.flightComeTime.minute}</Text> 
                             
                         }
                          <IconButton icon="clock-outline"
-                            style={{position:"absolute", top: "0%", width:"180%"  }}
+                            style={{position:"absolute", top: "0%", width:"187%"  }}
                             color={Colors.purple700}
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={{flexDirection: "row"}}>
-                    <TouchableOpacity onPress={()=>{
-                        if(this.state.travelling.pathToArriveBoardingPass)
-                        {
-                            FileViewer.open(this.state.travelling.pathToArriveBoardingPass)
-                        }
-                    }}>
-                        <Text>Посадочный билет туда</Text>
-                        {
-                            this.state.travelling.pathToArriveBoardingPass !== undefined ? 
-                            <Text >Нажмите,чтобы открыть</Text>
-                            :
-                            <Text>
-                                Не выбрано
-                            </Text>
-                        }
-                    </TouchableOpacity>
-                    <IconButton
-                        icon="file"
-                        onPress={()=>{
-                            FilePickerManager.showFilePicker(null,
-                                (response) => {
-                                    console.log('Response = ', response);
-                                
-                                    if (response.didCancel) {
-                                    console.log('User cancelled file picker');
-                                    }
-                                    else if (response.error) {
-                                    console.log('FilePickerManager Error: ', response.error);
-                                    }
-                                    else {
-                                        console.log(response)
-                                        let newTravelling = Object.assign({}, this.state.travelling);
-                                        newTravelling.pathToArriveBoardingPass = response.uri
-                                        this.setState({travelling: newTravelling});
-                                    }
-                                })
-                        }}
-                    />
+                <View style={{marginTop: 15}}>
+                    <Text style={{alignSelf: "center"}}>Посадочный билет туда</Text>
+                    <View style={[{flexDirection: "row"},styles.container]}>
+                        <TouchableOpacity onPress={()=>{
+                            if(this.state.travelling.pathToArriveBoardingPass)
+                            {
+                                FileViewer.open(this.state.travelling.pathToArriveBoardingPass)
+                            }
+                        }}>
+                            {
+                                this.state.travelling.pathToArriveBoardingPass !== undefined ? 
+                                <Text >Нажмите,чтобы открыть</Text>
+                                :
+                                <Text>
+                                    Не выбрано
+                                </Text>
+                            }
+                        </TouchableOpacity>
+                        <IconButton
+                            icon="folder-outline"
+                            onPress={()=>{
+                                FilePickerManager.showFilePicker(null,
+                                    (response) => {
+                                        console.log('Response = ', response);
+                                    
+                                        if (response.didCancel) {
+                                        console.log('User cancelled file picker');
+                                        }
+                                        else if (response.error) {
+                                        console.log('FilePickerManager Error: ', response.error);
+                                        }
+                                        else {
+                                            console.log(response)
+                                            let newTravelling = Object.assign({}, this.state.travelling);
+                                            newTravelling.pathToArriveBoardingPass = response.uri
+                                            this.setState({travelling: newTravelling});
+                                        }
+                                    })
+                            }}
+                            color={Colors.purple700}
+                            style={{position:"absolute", top: "0%", left:"87%"}}
+                        />
+                    </View>
                 </View>
-                {/* <View>
-                    <Text>Посадочный билет обратно</Text>
-                    {
-                        this.state.travelling.pathToComeBoardingPass !== undefined ? 
-                        <Text>
-                            boarding pass {this.state.travelling.pathToComeBoardingPass}
-                        </Text> :
-                        <Text>Не выбран</Text>
-                    }
-                    <Button 
-                        title="Выбрать посадочный билет обратно"
-                        onPress={()=>{this.selectDocument().then((path: string) => {
-                            let newTravelling = Object.assign({}, this.state.travelling);
-                            newTravelling.pathToComeBoardingPass = path;
-                            this.setState({travelling: newTravelling});
-                        })}}
-                    />
-                </View> */}
+                <View style={{marginTop: 15}}>
+                    <Text style={{alignSelf: "center"}}>Посадочный билет обратно</Text>
+                    <View style={[{flexDirection: "row"},styles.container]}>
+                        <TouchableOpacity onPress={()=>{
+                            if(this.state.travelling.pathToComeBoardingPass)
+                            {
+                                FileViewer.open(this.state.travelling.pathToComeBoardingPass)
+                            }
+                        }}>
+                            {
+                                this.state.travelling.pathToComeBoardingPass !== undefined ? 
+                                <Text>Нажмите,чтобы открыть</Text>
+                                :
+                                <Text>
+                                    Не выбрано
+                                </Text>
+                            }
+                        </TouchableOpacity>
+                        <IconButton
+                            icon="folder-outline"
+                            color={Colors.purple700}
+                            onPress={()=>{
+                                FilePickerManager.showFilePicker(null,
+                                    (response) => {
+                                        console.log('Response = ', response);
+                                    
+                                        if (response.didCancel) {
+                                        console.log('User cancelled file picker');
+                                        }
+                                        else if (response.error) {
+                                        console.log('FilePickerManager Error: ', response.error);
+                                        }
+                                        else {
+                                            console.log(response)
+                                            let newTravelling = Object.assign({}, this.state.travelling);
+                                            newTravelling.pathToComeBoardingPass = response.uri
+                                            this.setState({travelling: newTravelling});
+                                        }
+                                    })
+                            }}
+                            style={{position:"absolute", top: "0%", left:"87%"}}
+                        />
+                    </View>
+                </View>
                 <View>
                     <TextInput 
                     multiline={true}
