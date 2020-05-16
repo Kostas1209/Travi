@@ -21,7 +21,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
 
     const initialLayout = { 
         width: Dimensions.get('screen').width, 
-        heigth: Dimensions.get('screen').height - 100
+        heigth: Dimensions.get('screen').height - 140
     };
     
     const [index, setIndex] = React.useState(0);
@@ -36,7 +36,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
     const accordionContent = ( exprassion : (arrive: Date, come: Date , now: Date) => boolean )=>
       {
           return(
-              <View style={{height: "100%"}}>
+              <ScrollView style={{height: "100%"}}>
                   {
                       userTravelling.length > 0 ? 
                       userTravelling.map((travelling: Travelling, index : number) => 
@@ -67,7 +67,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
                           color: Colors.black
                         }}>Нет путешествий</Text>
                   }
-              </View>
+              </ScrollView>
           )
     }
     
@@ -113,7 +113,6 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
     });
     return(
         <ScrollView>
-            <View>
                 <HeaderComponent navigation={navigation} />
                 <TabView
                     sceneContainerStyle={{height: initialLayout.heigth, width: initialLayout.width}}
@@ -126,7 +125,6 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
                     onIndexChange={setIndex}
                     initialLayout={initialLayout}
                 />
-            </View>
         </ScrollView>
         )
 }

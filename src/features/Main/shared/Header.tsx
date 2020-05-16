@@ -11,10 +11,10 @@ const MyLeftComponent = (navigation) =>
 {
     return(
         <IconButton 
-                icon = "home"
-                color = {Colors.white}
+                icon = "checkbox-multiple-marked-circle-outline"
+                color = {Colors.pink100}
                 size={30}
-                onPress={()=>{navigation.navigate("MainScreen")}}
+                onPress={()=>{navigation.navigate("NeededThingsScreen")}}
                 animated={true}
             />
         
@@ -66,7 +66,7 @@ class HeaderComponent extends React.Component<{navigation, user: User}>
                 {
                     this.state.fontIsLoading ? 
                     <Header 
-                        //leftComponent={ MyLeftComponent(this.props.navigation) }
+                        leftComponent={ MyLeftComponent(this.props.navigation) }
                         centerComponent={{onPress:()=>this.props.navigation.navigate("MainScreen"), text: 'Travi', style: { color: Colors.pink100, fontFamily: "Darkline", fontSize: 40} }}
                         rightComponent={
                             <TouchableOpacity onPress={()=>{this.props.navigation.navigate("UserCabinet")}}>
