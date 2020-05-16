@@ -13,8 +13,8 @@ import PushNotification from "react-native-push-notification";
 
 
 interface Props{
-    navigation : any, 
-    route :any, 
+    navigation : any,
+    route :any,
     createTravel : (travelling: Travelling) => void
 }
 
@@ -37,28 +37,6 @@ class ChangeDate extends React.Component<Props, State>
 {
     state=INITIAL_STATE
 
-    constructor(props: any)
-    {
-        super(props)
-        PushNotification.configure({
-            onRegister: function(token) {
-              console.log("TOKEN:", token);
-            },
-            onNotification: function(notification) {
-              console.log("NOTIFICATION:", notification);
-             // notification.finish(PushNotificationIOS.FetchResult.NoData);
-            },
-           // senderID: "YOUR GCM (OR FCM) SENDER ID",
-            permissions: {
-              alert: true,
-              badge: true,
-              sound: true
-            },
-            popInitialNotification: true,
-            requestPermissions: true
-          });
-    }
-
     testPush = () =>
     {
         PushNotification.localNotification({
@@ -74,8 +52,8 @@ class ChangeDate extends React.Component<Props, State>
             date: new Date(Date.now() + 30 * 1000) // in 60 secs
         });
     }
-    
-    ChangeDate = async (): Promise<Date> => 
+
+    ChangeDate = async (): Promise<Date> =>
     {
         try {
             const {action, year, month, day} = await DatePickerAndroid.open({
@@ -84,7 +62,7 @@ class ChangeDate extends React.Component<Props, State>
               date: new Date(),
             });
             if (action !== DatePickerAndroid.dismissedAction) {
-              return (new Date(year,month,day)); 
+              return (new Date(year,month,day));
             }
             else{
                 return null
@@ -92,7 +70,7 @@ class ChangeDate extends React.Component<Props, State>
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
           }
-    } 
+    }
 
     render(){
         return(
@@ -117,11 +95,11 @@ class ChangeDate extends React.Component<Props, State>
                             <Text style={{ fontSize: 15,
                                 margin:15,
                                 alignSelf: "flex-start",}}>
-                                {this.state.arriveDate.getDate() + "\t" + 
+                                {this.state.arriveDate.getDate() + "\t" +
                                 monthNames[this.state.arriveDate.getMonth()] + "\t" +this.state.arriveDate.getFullYear()} -
-                                {"\t" + this.state.comeDate.getDate() + "\t" + 
+                                {"\t" + this.state.comeDate.getDate() + "\t" +
                                 monthNames[this.state.comeDate.getMonth()] + "\t" +this.state.comeDate.getFullYear()}
-                            </Text> 
+                            </Text>
                             :
                             <Text style={{fontSize: 15,
                                 alignSelf: "center"}}>Не указан</Text>
@@ -132,7 +110,7 @@ class ChangeDate extends React.Component<Props, State>
                                         />
                     </TouchableOpacity>
                     {
-                        this.state.calendarIsOpen && 
+                        this.state.calendarIsOpen &&
                         <DateRangePicker
                         initialRange={[this.state.arriveDate, this.state.comeDate]}
                         onSuccess={(from, to) => {
@@ -145,7 +123,7 @@ class ChangeDate extends React.Component<Props, State>
                         theme={{ edgeColor: Colors.purple700, markColor: Colors.purple200, markTextColor: 'white' }}/>
                     }
                     {
-                        !this.state.calendarIsOpen && 
+                        !this.state.calendarIsOpen &&
                         <PaperButton
                             color={Colors.white}
                             style={styles.button}
@@ -162,7 +140,7 @@ class ChangeDate extends React.Component<Props, State>
 
                             }}
                         > Сохранить </PaperButton>
-                    }             
+                    }
                 </View>
             </View>
         )

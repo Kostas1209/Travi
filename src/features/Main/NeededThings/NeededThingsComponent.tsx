@@ -4,23 +4,27 @@ import HeaderComponent from '../shared/Header';
 import { RootState } from 'src/redux/rootReducer';
 import { Thing } from 'src/types/Things';
 import { AnyAction } from 'redux';
-import { addThing, changeThing } from '../../../redux/NeededThings/actions';
+import { addThing, changeThing, deleteThing } from '../../../redux/NeededThings/actions';
 import { connect } from 'react-redux';
-import { Colors } from 'react-native-paper';
+import { Colors, TextInput } from 'react-native-paper';
 import { CheckBox } from 'react-native-elements';
+import { IconButton, Button as PaperButton, TextInput as PaperInput }from 'react-native-paper';
 
 interface Props
 {
     navigation : any,
     neededThings : Array<Thing>
     addThing: (thing : Thing) => void,
-    changeThing: (thing: Thing, index: number) => void
+    changeThing: (thing: Thing, index: number) => void,
+    deleteThing: (index: number) => void
 }
 
 class NeededThingsComponent extends React.Component<Props>
 {
     state={
-        neededThings : this.props.neededThings
+        neededThings : this.props.neededThings,
+        formIsVisiable: false,
+        formText : ""
     } 
     render()
     {
@@ -33,17 +37,25 @@ class NeededThingsComponent extends React.Component<Props>
                         this.props.neededThings.map((thing: Thing, index : number) => 
                         {
                             return(
-                                <CheckBox 
-                                    title={thing.name}
-                                    checked={thing.isPicked}
-                                    onPress={()=>{
-                                        // let newNeededThings = Object.assign({}, this.state.neededThings);
-                                        // newNeededThings[index] = {name: thing.name, isPicked: !thing.isPicked};
-                                        // console.log(newNeededThings);
-                                        this.props.changeThing({name: thing.name, isPicked: !thing.isPicked},index)
-                                        // this.setState({neededThings: newNeededThings })
-                                    }}
-                                />
+                                <View>
+                                    <View style={{flexDirection: "row", marginLeft : 20 }}>
+                                        <CheckBox 
+                                            title={thing.name}
+                                            checked={thing.isPicked}
+                                            onPress={()=>{
+                                                // let newNeededThings = Object.assign({}, this.state.neededThings);
+                                                // newNeededThings[index] = {name: thing.name, isPicked: !thing.isPicked};
+                                                // console.log(newNeededThings);
+                                                this.props.changeThing({name: thing.name, isPicked: !thing.isPicked},index)
+                                                // this.setState({neededThings: newNeededThings })
+                                            }}
+                                        />
+                                        <IconButton 
+                                            onPress={()=>{this.props.deleteThing(index)}}
+                                            icon="delete"
+                                        ></IconButton>
+                                    </View>                          
+                                </View>
                             )
                         }):
                         <Text style={{
@@ -53,6 +65,30 @@ class NeededThingsComponent extends React.Component<Props>
                           color: Colors.black
                         }}>Нет вещей</Text>
                     }
+                    <View style={{marginTop: 10,marginBottom: 200}}>
+                         {
+                             this.state.formIsVisiable ?
+                             <PaperInput 
+                                 label='Необходимый предмет'
+                                 style={{width : "80%", alignSelf: "center"}}
+                                 selectionColor="pink"
+                                 mode="outlined"
+                                 onChangeText={(text)=>{this.setState({formText: text})}}
+                                 value={this.state.formText}
+                                 onBlur={()=>{
+                                     this.props.addThing({name: this.state.formText, isPicked: false})
+                                     this.setState({formText: ""});
+                                     this.setState({formIsVisiable: false})
+                                 }}
+                             />:<Text></Text>
+                         }
+                         <PaperButton
+                             disabled={this.state.formIsVisiable}
+                             onPress={()=>{
+                                 this.setState({formIsVisiable: true})
+                             }}
+                         >Добавить</PaperButton>
+                    </View>  
                 </ScrollView>
             </View>
         )
@@ -64,7 +100,8 @@ const mapStateToProps = (state: RootState) => ({
 })
 const mapDispatchToProps = (dispatch: React.Dispatch<AnyAction>) => ({
     addThing: (thing: Thing) => dispatch(addThing({thing : thing})),
-    changeThing: (thing: Thing, index: number) => dispatch(changeThing({thing: thing, index: index}))
+    changeThing: (thing: Thing, index: number) => dispatch(changeThing({thing: thing, index: index})),
+    deleteThing: (index: number) => dispatch(deleteThing({index : index}))
 })
 
 export default connect(

@@ -9,3 +9,7 @@ export const changeThing = defineAction<{
     index: number,
     thing: Thing
 }>("CHANGE THING");
+
+export const deleteThing = defineAction<{
+    index: number,
+}>("DELETE THING");

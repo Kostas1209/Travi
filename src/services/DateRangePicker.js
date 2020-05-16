@@ -21,7 +21,11 @@ export default class DateRangePicker extends Component<Props> {
       this.setupStartMarker(day)
     } else if (!this.state.isToDatePicked) {
       let markedDates = {...this.state.markedDates}
-      let [mMarkedDates, range] = this.setupMarkedDates(this.state.fromDate, day.dateString, markedDates)
+      console.log(this.state.fromDate)
+      console.log(day.dateString)
+      console.log(markedDates);
+      let [mMarkedDates, range] = this.setupMarkedDates(new Date(this.state.fromDate), new Date(day.dateString), markedDates)
+      console.log("second ")
       if (range >= 0) {
         this.setState({isFromDatePicked: true, isToDatePicked: true, markedDates: mMarkedDates})
         this.setState({toDate: day.dateString})
@@ -34,13 +38,17 @@ export default class DateRangePicker extends Component<Props> {
   setupStartMarker = (day) => {
     let markedDates = {[day.dateString]: {startingDay: true, color: this.props.theme.markColor, textColor: this.props.theme.markTextColor}}
     this.setState({isFromDatePicked: true, isToDatePicked: false, fromDate: day.dateString, markedDates: markedDates})
+    console.log('picked day' + day)
   }
 
   setupMarkedDates = (fromDate, toDate, markedDates) => {
+    console.log("from Fate" +fromDate.getFullYear())
     let mFromDate = new XDate(fromDate.getFullYear(), fromDate.getMonth(),fromDate.getDate())
-    let mToDate = new XDate(toDate.getFullYear(), toDate.getMonth(),toDate.getDate())
+    let mToDate = new XDate(toDate.getFullYear(), toDate.getMonth(), toDate.getDate())
     let range = mFromDate.diffDays(mToDate) /// Bug Range not integer
-    console.log(range);
+    console.log(mFromDate);
+    console.log(mToDate);
+    console.log("range" + range);
     if (range >= 0) {
       if (range == 0) {
         markedDates = {[toDate]: {color: this.props.theme.edgeColor, textColor: this.props.theme.markTextColor}}

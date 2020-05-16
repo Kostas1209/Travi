@@ -1,6 +1,6 @@
 import React from 'react';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import { View} from 'react-native';
+import { View, Text} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Button as PaperButton, Colors } from 'react-native-paper';
 import styles from "./NewTravellingStyles";
@@ -16,7 +16,8 @@ interface MapState{
     region: IRegion,
     country: string,
     town: string,
-    SelectTown: string
+    SelectTown: string,
+    isButtonVisiable: boolean
 }
 
 const INITIAL_STATE : MapState={
@@ -32,7 +33,8 @@ const INITIAL_STATE : MapState={
     },
     country: "",
     town: "",
-    SelectTown: ""
+    SelectTown: "",
+    isButtonVisiable: false
 }
 
 
@@ -87,32 +89,46 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                     <TextInput 
                         style={styles.input}
                         placeholder="Enter your endpoint town"
-                        onChangeText={text => this.onChangeTown(text)}
+                        onChangeText={(text) => {
+                            this.onChangeTown(text)
+                            this.setState({isButtonVisiable: false})
+                        }}
                     />
-                    <View style={{flexDirection: "row"}}>
-                        <PaperButton 
+                    <View>
+                        {
+                            this.state.isButtonVisiable === false ? 
+                            <PaperButton 
                             style={[styles.button,{backgroundColor: "#800080"}]}
-                            onPress={this.SearchTown}
-                            color={Colors.white}
-                        >
-                            Найти
-                        </PaperButton>
-                        <PaperButton 
-                            style={[styles.button,{backgroundColor: Colors.green300}]}
                             onPress={()=>{
-                                fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=
-                                ${this.state.location.latitude},${this.state.location.longitude}&key=${GOOGLE_API_KEY}`)
-                                .then(response => response.json())
-                                .then((data: any) => {
-                                    console.log(data.results[data.results.length - 3].formatted_address);
-                                    this.setState(INITIAL_STATE);
-                                    this.props.navigation.navigate("ChangeDate",{town: data.results[data.results.length - 3].formatted_address})
-                                }) 
+                                this.SearchTown()
+                                this.setState({isButtonVisiable : true})
                             }}
                             color={Colors.white}
-                        >
-                            Подтвердить
-                        </PaperButton>
+                            >
+                                Найти
+                            </PaperButton> :
+                            <Text> </Text>
+                        }
+                        {
+                            this.state.isButtonVisiable === true ?
+                            <PaperButton 
+                                style={[styles.button,{backgroundColor: Colors.green300}]}
+                                onPress={()=>{
+                                    fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=
+                                    ${this.state.location.latitude},${this.state.location.longitude}&key=${GOOGLE_API_KEY}`)
+                                    .then(response => response.json())
+                                    .then((data: any) => {
+                                        console.log(data.results[data.results.length - 3].formatted_address);
+                                        this.setState(INITIAL_STATE);
+                                        this.props.navigation.navigate("ChangeDate",{town: data.results[data.results.length - 3].formatted_address})
+                                    }) 
+                                }}
+                                color={Colors.white}
+                            >
+                                Подтвердить
+                            </PaperButton> : 
+                            <Text> </Text>
+                        }
                     </View>
                     
                 </View>

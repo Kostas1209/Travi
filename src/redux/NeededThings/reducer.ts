@@ -1,6 +1,6 @@
 import { Thing } from "src/types/Things"
 import { Action } from "redux"
-import { addThing, changeThing } from "./actions";
+import { addThing, changeThing, deleteThing } from "./actions";
 
 const array: Array<Thing>= [
     {name: "passport", isPicked: false},
@@ -33,6 +33,15 @@ export function thingsReducer(state: NeededThingsState = INITIAL_STATE, action: 
         let newThingsList = Object.assign([], state.neededThings);
         newThingsList[action.index] = action.thing;
         return{
+            ...state,
+            neededThings: newThingsList
+        }
+    }
+    if(deleteThing.is(action))
+    {
+        let newThingsList = Object.assign([], state.neededThings);
+        newThingsList.splice(action.index,1);
+        return {
             ...state,
             neededThings: newThingsList
         }
