@@ -15,3 +15,10 @@ export class User
         this.username = username;
     }
 }
+
+export interface UserDocument
+{
+    path: string
+    documentType : string,
+    additionInfo : string
+}

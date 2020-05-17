@@ -1,16 +1,19 @@
 import { Action } from "redux";
-import { setIsUserInit, SaveUser, SaveAvatar } from "./actions";
-import { User } from "../../types/User";
+import { setIsUserInit, SaveUser, SaveAvatar, addDocument, deleteDocument } from "./actions";
+import { User, UserDocument } from "../../types/User";
 
 const INITIAL_STATE = {
     user: new User(),
-    userCreate: false
+    userCreate: false,
+    documentList : []
 };
 
 
 export interface UserState{
     userCreate: boolean
-    user: User
+    user: User,
+    documentList: Array<UserDocument>
+
 }
 
 export function userReducer(state: UserState  = INITIAL_STATE, action: Action):UserState  {
@@ -39,6 +42,24 @@ export function userReducer(state: UserState  = INITIAL_STATE, action: Action):U
         return{
             ...state,
             user: newUser
+        }
+    }
+    if(addDocument.is(action))
+    {
+        let newDocumentList = Object.assign([], state.documentList);
+        newDocumentList.push(action.document);
+        return{
+            ...state,
+            documentList: newDocumentList
+        }
+    }
+    if(deleteDocument.is(action))
+    {
+        let newDocumentList = Object.assign([], state.documentList);
+        newDocumentList.splice(action.index,1);
+        return {
+            ...state,
+            documentList: newDocumentList
         }
     }
 

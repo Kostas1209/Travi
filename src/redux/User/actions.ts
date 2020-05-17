@@ -1,5 +1,5 @@
 import { defineAction } from "rd-redux-utils"
-import { User } from "../../types/User";
+import { User, UserDocument } from "../../types/User";
 
 export const setIsUserInit = defineAction<{
     userCreate : boolean;
@@ -12,3 +12,11 @@ export const SaveUser = defineAction<{
 export const SaveAvatar = defineAction<{
     imagePath: string 
 }>("SAVE AVATAR")
+
+export const deleteDocument = defineAction<{
+    index: number,
+}>("DELETE DOCUMENT");
+
+export const addDocument = defineAction<{
+    document: UserDocument
+}>("ADD DOCUMENT");
