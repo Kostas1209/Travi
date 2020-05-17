@@ -29,16 +29,16 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
     validationSchema = yup.object().shape({
         email: yup.string()
           .label('Email')
-          .email('Enter a valid email')
-          .required("email is required"),
+          .email('Email введён не правильно')
+          .required("Требуется email "),
         name: yup.string()
           .label('Email')
-          .min(2,'name min 2 letters')
-          .required("Name is required"),
+          .min(2,'Имя минимум 2 буквы')
+          .required("Требуется имя"),
         lastName: yup.string()
           .label('Email')
-          .min(2,'lastname min 2 letters')
-          .required("lastName is required")
+          .min(2,'Фамилия минимум 2 буквы')
+          .required("Требуется фамилия")
     })
 
 

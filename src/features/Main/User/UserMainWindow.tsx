@@ -67,7 +67,6 @@ class MainWindowComponent extends React.Component<Props>
                 <Text style={{alignSelf: "center"}}>Привет, {this.props.user.name}!</Text>
                 <PaperButton onPress={()=>this.props.navigation.navigate("UserInfo")}>User Info</PaperButton>
                 <PaperButton onPress={()=>this.props.navigation.navigate("UserDocument")}>User Document</PaperButton>
-                <PaperButton onPress={()=>this.props.navigation.navigate("UserSOS")}>User SOS</PaperButton>
             </View>
         )
     }

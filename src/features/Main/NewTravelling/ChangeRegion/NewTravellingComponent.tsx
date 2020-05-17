@@ -1,6 +1,6 @@
 import React from 'react';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import { View, Text} from 'react-native';
+import { View, Text, Animated} from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { Button as PaperButton, Colors } from 'react-native-paper';
 import styles from "./NewTravellingStyles";
@@ -17,7 +17,9 @@ interface MapState{
     country: string,
     town: string,
     SelectTown: string,
-    isButtonVisiable: boolean
+    isButtonVisiable: boolean,
+    errorMessage: string,
+    fadeAnim : any
 }
 
 const INITIAL_STATE : MapState={
@@ -34,7 +36,9 @@ const INITIAL_STATE : MapState={
     country: "",
     town: "",
     SelectTown: "",
-    isButtonVisiable: false
+    isButtonVisiable: false,
+    errorMessage : "asdf",
+    fadeAnim : new Animated.Value(0)
 }
 
 
@@ -43,6 +47,22 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
     
     myRef: MapView;
     
+    fadeOutDialog = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        Animated.sequence(
+            [
+                Animated.timing(this.state.fadeAnim, {
+                    toValue: 1,
+                    duration: 5000
+                  }),
+                Animated.timing(this.state.fadeAnim, {
+                    toValue: 0,
+                    duration: 3000
+                  })
+            ]
+        ).start()
+        console.log("animation is going")
+    }
 
     SearchTown = () =>
     {
@@ -61,10 +81,18 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                     latitudeDelta: 0.1,
                     longitudeDelta: 0.1,
                 }})
+                this.setState({isButtonVisiable : true})
             }
             else{
+                this.setState({errorMessage : "Не смогли найти такой город"});
+                this.fadeOutDialog()
                 console.log("Some went wrong")
             }
+        })
+        .catch(error => {
+            this.setState({errorMessage : "Проверьте интернет подключение"});
+            this.fadeOutDialog()
+            console.log(JSON.stringify(error))
         })
     }
 
@@ -101,7 +129,6 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                             style={[styles.button,{backgroundColor: "#800080"}]}
                             onPress={()=>{
                                 this.SearchTown()
-                                this.setState({isButtonVisiable : true})
                             }}
                             color={Colors.white}
                             >
@@ -129,6 +156,17 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                             </PaperButton> : 
                             <Text> </Text>
                         }
+                        <Animated.View
+                            style={{
+                            //backgroundColor: Colors.red500,
+                            display: this.state.errorMessage !== "" ? null : "none",
+                            width: "80%",
+                            borderRadius: 10,
+                            alignSelf: "center",
+                            opacity: this.state.fadeAnim}} >
+                            <Text style={{paddingTop: 2, paddingLeft: 5,alignSelf: "center", fontSize: 15}}>{this.state.errorMessage}</Text>
+                        </Animated.View>
+
                     </View>
                     
                 </View>

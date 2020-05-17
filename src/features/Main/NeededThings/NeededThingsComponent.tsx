@@ -40,6 +40,7 @@ class NeededThingsComponent extends React.Component<Props>
                                 <View>
                                     <View style={{flexDirection: "row", marginLeft : 20 }}>
                                         <CheckBox 
+                                            containerStyle={{maxWidth: "80%",paddingRight : 30}}
                                             title={thing.name}
                                             checked={thing.isPicked}
                                             onPress={()=>{
