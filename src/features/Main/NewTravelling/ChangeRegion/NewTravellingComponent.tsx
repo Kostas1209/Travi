@@ -53,7 +53,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
             [
                 Animated.timing(this.state.fadeAnim, {
                     toValue: 1,
-                    duration: 5000
+                    duration: 3000
                   }),
                 Animated.timing(this.state.fadeAnim, {
                     toValue: 0,
@@ -128,7 +128,14 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                             <PaperButton 
                             style={[styles.button,{backgroundColor: "#800080"}]}
                             onPress={()=>{
-                                this.SearchTown()
+                                if(this.state.town === "")
+                                {
+                                    this.setState({errorMessage : "Нужно указать город"});
+                                    this.fadeOutDialog()
+                                }
+                                else{
+                                    this.SearchTown()
+                                }
                             }}
                             color={Colors.white}
                             >
@@ -164,7 +171,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                             borderRadius: 10,
                             alignSelf: "center",
                             opacity: this.state.fadeAnim}} >
-                            <Text style={{paddingTop: 2, paddingLeft: 5,alignSelf: "center", fontSize: 15}}>{this.state.errorMessage}</Text>
+                            <Text style={{paddingTop: 2, paddingLeft: 5,alignSelf: "center", fontSize: 15, color: Colors.red500}}>{this.state.errorMessage}</Text>
                         </Animated.View>
 
                     </View>

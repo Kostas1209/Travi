@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import * as yup from 'yup'; 
 
+const re = new RegExp("[а-я]+");
 
 interface RegistrationProps{
     navigation: any
@@ -32,13 +33,15 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
           .email('Email введён не правильно')
           .required("Требуется email "),
         name: yup.string()
-          .label('Email')
+          .label('Имя')
           .min(2,'Имя минимум 2 буквы')
-          .required("Требуется имя"),
+          .required("Требуется имя")
+          .matches(re, "Имя должно содержать только русские буквы"),
         lastName: yup.string()
           .label('Email')
           .min(2,'Фамилия минимум 2 буквы')
           .required("Требуется фамилия")
+          .matches(re, "Фамилия должна содержать только русские буквы"),
     })
 
 

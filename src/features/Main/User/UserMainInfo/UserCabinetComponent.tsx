@@ -28,18 +28,35 @@ class UserCabinet extends React.Component<UserCabinetProps>
     state = {
         location: null,
         dialogIsOpen: true,
-        fadeAnim : new Animated.Value(0)
+        fadeAnimSuccess : new Animated.Value(0),
+        fadeAnimError : new Animated.Value(0)
       };
 
-    fadeOutDialog = () => {
+    fadeOutDialogSuccess = () => {
         // Will change fadeAnim value to 0 in 5 seconds
         Animated.sequence(
             [
-                Animated.timing(this.state.fadeAnim, {
+                Animated.timing(this.state.fadeAnimSuccess, {
                     toValue: 1,
                     duration: 2000
                   }),
-                Animated.timing(this.state.fadeAnim, {
+                Animated.timing(this.state.fadeAnimSuccess, {
+                    toValue: 0,
+                    duration: 2000
+                  })
+            ]
+        ).start()
+    };
+
+    fadeOutDialogError = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        Animated.sequence(
+            [
+                Animated.timing(this.state.fadeAnimError, {
+                    toValue: 1,
+                    duration: 2000
+                  }),
+                Animated.timing(this.state.fadeAnimError, {
                     toValue: 0,
                     duration: 2000
                   })
@@ -102,29 +119,29 @@ class UserCabinet extends React.Component<UserCabinetProps>
           error => Alert.alert(error.message),
           { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
-      };
+    };
       
     render(){
         return(
             <View>
                 <HeaderComponent navigation={this.props.navigation}/>
                 <Animated.View style={{
-                        backgroundColor: Colors.green500,
+                        //backgroundColor: Colors.green500,
                         display: this.state.dialogIsOpen ? null : "none",
                         width: "60%",
                         height: "10%",
                         borderRadius: 10,
                         alignSelf: "center",
-                        opacity: this.state.fadeAnim
+                        opacity: this.state.fadeAnimSuccess
                     }}>
                     <TouchableOpacity 
                     style={{flexDirection: "row",alignContent: "center",
                     alignItems: "center",
                     alignSelf: "center",}}
                     onPress={() => this.setState({dialogIsOpen: false} )}>
-                        <Text>Успешно сохранено</Text>
+                        <Text style={{color: Colors.green500}}>Успешно сохранено</Text>
                         <IconButton icon="checkbox-marked-outline"
-                            color={Colors.black}
+                            color={Colors.green500}
                         />
                     </TouchableOpacity>
                 </Animated.View>
@@ -151,7 +168,7 @@ class UserCabinet extends React.Component<UserCabinetProps>
                             newUser.name = values.name
                             newUser.username = values.username
                             this.props.changeUserInfo(newUser)
-                            this.fadeOutDialog()
+                            this.fadeOutDialogSuccess()
                         }
                     }
                     validationSchema={this.validationSchema}
@@ -181,10 +198,13 @@ class UserCabinet extends React.Component<UserCabinetProps>
                                     <TouchableOpacity style={userCabinetStyles.dateContainer}
                                     onPress={()=>{
                                         this.ChangeDate().then((date:Date) => {
-                                            if(date)
+                                            if(date  && date < new Date())
                                             {
                                                 prop.setFieldValue('birthday',date)
                                                 prop.setTouched({'birthday': true })
+                                            }
+                                            else{
+                                                this.fadeOutDialogError()
                                             }
                                         })
                                     }}
@@ -205,6 +225,17 @@ class UserCabinet extends React.Component<UserCabinetProps>
                                             color={Colors.purple700}
                                         />
                                     </TouchableOpacity>
+                                    <Animated.View style={{
+                                        //backgroundColor: Colors.green500,
+                                        display: this.state.dialogIsOpen ? null : "none",
+                                        width: "60%",
+                                        height: "10%",
+                                        borderRadius: 10,
+                                        alignSelf: "center",
+                                        opacity: this.state.fadeAnimError
+                                    }}>
+                                       <Text style={{color:Colors.red500}}>Дата выбрана неправильно</Text> 
+                                    </Animated.View>
                             </View>
                             {/* <TouchableOpacity onPress={this.findCoordinates}>
                                 <Text>Find My Coords?</Text>

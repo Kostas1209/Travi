@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, DatePickerAndroid, TouchableOpacity} from 'react-native';
+import { View, Text, DatePickerAndroid, TouchableOpacity, Animated} from 'react-native';
 import HeaderComponent  from '../../shared/Header';
 import { styles } from './ChangeDateStyles';
 import { Button as PaperButton, Colors, IconButton} from 'react-native-paper';
@@ -19,23 +19,44 @@ interface Props{
 }
 
 interface State{
-    arriveDate: Date,
-    comeDate: Date,
+    arriveDate: Date | undefined,
+    comeDate: Date | undefined,
     name: string,
     nameCorrect: boolean,
-    calendarIsOpen: boolean
+    calendarIsOpen: boolean,
+    successEnterDate: boolean
+    fadeAnim : Animated.Value
 }
 const INITIAL_STATE: State = {
-    arriveDate: new Date(),
-    comeDate: new Date(),
+    arriveDate: undefined,
+    comeDate: undefined,
     name: "",
     nameCorrect: false,
-    calendarIsOpen: false
+    calendarIsOpen: false,
+    successEnterDate : false,
+    fadeAnim : new Animated.Value(0)
 }
 
 class ChangeDate extends React.Component<Props, State>
 {
     state=INITIAL_STATE
+
+    fadeOutDialog = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        Animated.sequence(
+            [
+                Animated.timing(this.state.fadeAnim, {
+                    toValue: 1,
+                    duration: 3000
+                  }),
+                Animated.timing(this.state.fadeAnim, {
+                    toValue: 0,
+                    duration: 3000
+                  })
+            ]
+        ).start()
+        console.log("animation is going")
+    }
 
     testPush = () =>
     {
@@ -76,14 +97,14 @@ class ChangeDate extends React.Component<Props, State>
         return(
             <View>
                 <HeaderComponent navigation={this.props.navigation} />
-                <PaperButton
+                {/* <PaperButton
                     onPress={()=>{
                         this.schedulPush()
                         this.testPush()
                     }}
                 >
                     Notification
-                </PaperButton>
+                </PaperButton> */}
                 <View>
                     <Text style={styles.Text}>{this.props.route.params.town}</Text>
                     <TouchableOpacity
@@ -91,33 +112,43 @@ class ChangeDate extends React.Component<Props, State>
                         onPress={()=>{this.setState({calendarIsOpen: !this.state.calendarIsOpen})}}
                     >
                         {
-                            this.state.arriveDate !== undefined?
+                            this.state.arriveDate !== undefined && this.state.comeDate !== undefined?
                             <Text style={{ fontSize: 15,
                                 margin:15,
                                 alignSelf: "flex-start",}}>
                                 {this.state.arriveDate.getDate() + "\t" +
-                                monthNames[this.state.arriveDate.getMonth()] + "\t" +this.state.arriveDate.getFullYear()} -
-                                {"\t" + this.state.comeDate.getDate() + "\t" +
-                                monthNames[this.state.comeDate.getMonth()] + "\t" +this.state.comeDate.getFullYear()}
+                                monthNames[this.state.arriveDate.getMonth()] + "\t" +this.state.arriveDate.getFullYear()} - {this.state.comeDate.getDate() + "\t" + monthNames[this.state.comeDate.getMonth()] + "\t" +this.state.comeDate.getFullYear()}
                             </Text>
                             :
-                            <Text style={{fontSize: 15,
-                                alignSelf: "center"}}>Не указан</Text>
+                            <Text style={{ fontSize: 15,
+                                margin:15,
+                                alignSelf: "flex-start",}}>Не указан</Text>
                         }
                         <IconButton icon="calendar"
                                             style={{position:"absolute", top: "0%", width:"180%"  }}
                                             color={Colors.purple700}
                                         />
                     </TouchableOpacity>
+                    <Animated.View
+                            style={{
+                            //backgroundColor: Colors.red500,
+                            width: "80%",
+                            borderRadius: 10,
+                            alignSelf: "center",
+                            opacity: this.state.fadeAnim}} >
+                            <Text style={{paddingTop: 2, paddingLeft: 5,alignSelf: "center", fontSize: 15, color: Colors.red500}}>Нужно выбрать дату</Text>
+                    </Animated.View>
                     {
                         this.state.calendarIsOpen &&
                         <DateRangePicker
-                        initialRange={[this.state.arriveDate, this.state.comeDate]}
+                        initialRange={[this.state.arriveDate ? this.state.arriveDate : new Date(), this.state.comeDate ? this.state.comeDate : new Date()]}
                         onSuccess={(from, to) => {
                             this.setState({arriveDate: new Date(from)});
                             this.setState({comeDate: new Date(to)});
                             this.setState({calendarIsOpen : false})
+                            this.setState({successEnterDate : true})
                             console.log(from + ' || ' + to)
+
                         }}
                         onEject={()=>this.setState({calendarIsOpen : false})}
                         theme={{ edgeColor: Colors.purple700, markColor: Colors.purple200, markTextColor: 'white' }}/>
@@ -126,18 +157,24 @@ class ChangeDate extends React.Component<Props, State>
                         !this.state.calendarIsOpen &&
                         <PaperButton
                             color={Colors.white}
-                            style={styles.button}
-                            onPress={()=>{
-                                this.props.createTravel({
-                                    name: this.state.name,
-                                    country: this.props.route.params.town,
-                                    arriveDate: this.state.arriveDate,
-                                    comeDate: this.state.comeDate
-                                })
-                                this.setState(INITIAL_STATE);
-                                this.props.navigation.push("ChangeRegion");
-                                this.props.navigation.navigate("MainScreen")
-
+                            style={this.state.successEnterDate ? styles.button : styles.unactiveButton}
+                            onPress={()=>
+                                {
+                                    if(this.state.successEnterDate)
+                                    {
+                                        this.props.createTravel({
+                                            name: this.state.name,
+                                            country: this.props.route.params.town,
+                                            arriveDate: this.state.arriveDate,
+                                            comeDate: this.state.comeDate
+                                        })
+                                        this.setState(INITIAL_STATE);
+                                        this.props.navigation.push("ChangeRegion");
+                                        this.props.navigation.navigate("MainScreen")
+                                    }
+                                    else{
+                                        this.fadeOutDialog();
+                                    }
                             }}
                         > Сохранить </PaperButton>
                     }

@@ -320,7 +320,7 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                         style={styles.input}
                         value={this.state.travelling.yourPlan}/>
                 </View>
-                <View style={{height : 150, marginTop:50  ,flexDirection: "row", alignSelf: "center"}}>
+                <View style={{marginTop:50, marginBottom:50  ,flexDirection: "row", alignSelf: "center"}}>
                     <PaperButton
                             mode="contained"
                             icon="delete"

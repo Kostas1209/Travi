@@ -2,11 +2,18 @@ import { StyleSheet, Dimensions } from 'react-native'
 import { Colors } from 'react-native-paper'
 
 export const styles = StyleSheet.create ({
-    button :{
+    unactiveButton :{
         position: "absolute",
         top: Dimensions.get('screen').height - 200,
         alignSelf: "center",
         backgroundColor: Colors.purple100,
+        width: "65%",
+    },
+    button :{
+        position: "absolute",
+        top: Dimensions.get('screen').height - 200,
+        alignSelf: "center",
+        backgroundColor: Colors.purple700,
         width: "65%",
     },
     container: {
