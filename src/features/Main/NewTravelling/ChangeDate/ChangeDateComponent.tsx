@@ -12,6 +12,19 @@ import DateRangePicker from '../../../../services/DateRangePicker';
 import PushNotification from "react-native-push-notification";
 
 
+const notificationHours = 11;
+
+const scheduleNotification = [
+    {amountDaysToTravelling : 100 , message: "До поездки в {country} 100 дней. Пора найти жильё!"},
+    {amountDaysToTravelling : 60 , message: "До поездки в {country} 60 дней. Жильё уже найдено?"},
+    {amountDaysToTravelling : 30 , message: "Поездка уже через месяц! Пора начать изучать {country}"},
+    {amountDaysToTravelling : 14 , message: "До поездки в {country} 2 недели! Все ли билеты куплены? Занесите все документы в приложение, чтобы они были всегда при вас"},
+    {amountDaysToTravelling : 7 , message: "Поездки в {country} уже через неделю! Проверьте свои билеты/рейсы и бронирования"},
+    {amountDaysToTravelling : 3 , message: "До {country} осталось 3 дня! Пора собирать вещи. Воспользуйтесь нашим Списком Вещей, чтобы ничего не забыть"},
+    {amountDaysToTravelling : 1 , message: "Проверьте своим документы и собраные вещи"},
+    {amountDaysToTravelling : 0 , message: "Удачного путешествия !"},
+]
+
 interface Props{
     navigation : any,
     route :any,
@@ -66,14 +79,6 @@ class ChangeDate extends React.Component<Props, State>
         });
     }
 
-    schedulPush = () => {
-        PushNotification.localNotificationSchedule({
-            //... You can use all the options from localNotifications
-            message: "My schedull notification message", // (required)
-            date: new Date(Date.now() + 30 * 1000) // in 60 secs
-        });
-    }
-
     ChangeDate = async (): Promise<Date> =>
     {
         try {
@@ -91,6 +96,25 @@ class ChangeDate extends React.Component<Props, State>
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
           }
+    }
+
+    SetScheduleNotification = (arriveDate : Date, country : string) =>
+    {
+        let today = new Date()
+        let iterDate = arriveDate;
+        for(let i = 0; i < scheduleNotification.length; ++i )
+        {
+            if(arriveDate.getTime() - scheduleNotification[i].amountDaysToTravelling * 24 * 60 * 60 * 1000  > today.getTime())
+            {
+                console.log(scheduleNotification[i].amountDaysToTravelling);
+                let notificationDate : Date = new Date(new Date(arriveDate.getTime() - scheduleNotification[i].amountDaysToTravelling * 24 * 60 * 60 * 1000).setHours(notificationHours));
+                PushNotification.localNotificationSchedule({
+                    //... You can use all the options from localNotifications
+                    message: scheduleNotification[i].message.replace("{country}", country), // (required)
+                    date: notificationDate// in 60 secs
+                });
+            }
+        }
     }
 
     render(){
@@ -168,6 +192,7 @@ class ChangeDate extends React.Component<Props, State>
                                             arriveDate: this.state.arriveDate,
                                             comeDate: this.state.comeDate
                                         })
+                                        this.SetScheduleNotification(this.state.arriveDate, this.props.route.params.town)
                                         this.setState(INITIAL_STATE);
                                         this.props.navigation.push("ChangeRegion");
                                         this.props.navigation.navigate("MainScreen")

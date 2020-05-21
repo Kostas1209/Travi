@@ -16,7 +16,6 @@ interface MapState{
     region: IRegion,
     country: string,
     town: string,
-    SelectTown: string,
     isButtonVisiable: boolean,
     errorMessage: string,
     fadeAnim : any
@@ -35,7 +34,6 @@ const INITIAL_STATE : MapState={
     },
     country: "",
     town: "",
-    SelectTown: "",
     isButtonVisiable: false,
     errorMessage : "asdf",
     fadeAnim : new Animated.Value(0)
@@ -111,12 +109,12 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
     render()
     {
         return (
-            <View style={{flex : 1}}>
+            <View style={{flexDirection :"column", flex : 1}}>
                 <HeaderComponent navigation={this.props.navigation} />
-                <View style={{flex:5,borderColor: '#009688',borderWidth: 1}}>
+                <View style={{flex:5}}>
                     <TextInput 
                         style={styles.input}
-                        placeholder="Enter your endpoint town"
+                        placeholder="Введите город назначения"
                         onChangeText={(text) => {
                             this.onChangeTown(text)
                             this.setState({isButtonVisiable: false})
@@ -146,7 +144,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                         {
                             this.state.isButtonVisiable === true ?
                             <PaperButton 
-                                style={[styles.button,{backgroundColor: Colors.green300}]}
+                                style={[styles.button,{backgroundColor: Colors.green500}]}
                                 onPress={()=>{
                                     fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=
                                     ${this.state.location.latitude},${this.state.location.longitude}&key=${GOOGLE_API_KEY}`)
@@ -154,6 +152,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                                     .then((data: any) => {
                                         console.log(data.results[data.results.length - 3].formatted_address);
                                         this.setState(INITIAL_STATE);
+                                        this.setState({town : ""});
                                         this.props.navigation.navigate("ChangeDate",{town: data.results[data.results.length - 3].formatted_address})
                                     }) 
                                 }}
@@ -163,25 +162,28 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                             </PaperButton> : 
                             <Text> </Text>
                         }
-                        <Animated.View
+
+                    </View>
+                    <Animated.View
                             style={{
                             //backgroundColor: Colors.red500,
+                            position: "absolute",
+                            top: "70%",
+                            marginTop: 10,
                             display: this.state.errorMessage !== "" ? null : "none",
                             width: "80%",
                             borderRadius: 10,
                             alignSelf: "center",
                             opacity: this.state.fadeAnim}} >
                             <Text style={{paddingTop: 2, paddingLeft: 5,alignSelf: "center", fontSize: 15, color: Colors.red500}}>{this.state.errorMessage}</Text>
-                        </Animated.View>
-
-                    </View>
+                    </Animated.View>
                     
                 </View>
                 <MapView
                     zoomControlEnabled={false}
                     ref = {(mapView) => { this.myRef = mapView; }}
                     provider={PROVIDER_GOOGLE}
-                    style={{position:"relative", flex: 11}}
+                    style={{position:"relative", height: "62%"}}
                     region={this.state.region}
                     //   onRegionChange={region=>{
                     //     this.onRegionChange(region);

@@ -218,7 +218,7 @@ class UserCabinet extends React.Component<UserCabinetProps>
                                                 monthNames[prop.values.birthday.getMonth()] + "\t" +prop.values.birthday.getFullYear()}
                                             </Text> 
                                             :
-                                            <Text style={{alignSelf:"center", textAlign: "center", left: 10}}>Не указан</Text>
+                                            <Text style={{alignSelf:"center", textAlign: "center", left: 10}}>День рождения не указан</Text>
                                         }
                                         <IconButton icon="calendar"
                                             style={{position:"absolute", top: "0%", width:"180%"  }}

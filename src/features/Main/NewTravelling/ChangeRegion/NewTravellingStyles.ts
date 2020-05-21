@@ -18,9 +18,9 @@ const styles = StyleSheet.create ({
         width: "50%",
         fontSize: 20,
         alignSelf: "center",
-        top: 10,
+        top: "100%",
         borderRadius: 20,
-        position: "relative"
+        position: "absolute"
     },
 })
 

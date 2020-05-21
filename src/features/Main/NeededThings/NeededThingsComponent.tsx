@@ -26,6 +26,12 @@ class NeededThingsComponent extends React.Component<Props>
         formIsVisiable: false,
         formText : ""
     } 
+
+    componentWillMount()
+    {
+        console.log(this.props.neededThings)
+    }
+
     render()
     {
         return(
@@ -34,7 +40,7 @@ class NeededThingsComponent extends React.Component<Props>
                 <ScrollView style={{height: "100%"}}>
                     {
                         this.state.neededThings.length > 0 ? 
-                        this.props.neededThings.map((thing: Thing, index : number) => 
+                        this.state.neededThings.map((thing: Thing, index : number) => 
                         {
                             return(
                                 <View>
@@ -52,7 +58,12 @@ class NeededThingsComponent extends React.Component<Props>
                                             }}
                                         />
                                         <IconButton 
-                                            onPress={()=>{this.props.deleteThing(index)}}
+                                            onPress={()=>{
+                                                this.props.deleteThing(index)
+                                                let newThingsList = Object.assign([], this.state.neededThings);
+                                                newThingsList.splice(index,1);
+                                                this.setState({neededThings: newThingsList});
+                                            }}
                                             icon="delete"
                                         ></IconButton>
                                     </View>                          
@@ -78,6 +89,9 @@ class NeededThingsComponent extends React.Component<Props>
                                  value={this.state.formText}
                                  onBlur={()=>{
                                      this.props.addThing({name: this.state.formText, isPicked: false})
+                                     let newThingsList = Object.assign([], this.state.neededThings);
+                                     newThingsList.push({name: this.state.formText, isPicked: false});
+                                     this.setState({neededThings :newThingsList});
                                      this.setState({formText: ""});
                                      this.setState({formIsVisiable: false})
                                  }}

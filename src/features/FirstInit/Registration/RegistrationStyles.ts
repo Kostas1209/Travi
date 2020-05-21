@@ -8,9 +8,9 @@ const styles = StyleSheet.create ({
         opacity: 0.3,
         fontFamily: "Darkline",
         position: "absolute",
-        top: "1%",
+        top: "1%",    
         alignSelf: "center",
-        fontSize: windowWidth * 0.45 ,
+        fontSize: windowWidth * 0.4 ,
         color: Colors.pink100
     },
     container:{
@@ -22,7 +22,6 @@ const styles = StyleSheet.create ({
         paddingBottom : "20%"
     },
     button:{
-        width: "50%",
         alignSelf: "center",
         top: 30,
         backgroundColor: "#800080",

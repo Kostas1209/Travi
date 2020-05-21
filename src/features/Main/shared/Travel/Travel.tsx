@@ -96,10 +96,11 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
     {
         return(
             <KeyboardAvoidingView behavior="height" enabled>
-            <ScrollView>
+            <ScrollView
+                ref='_scrollView'
+            >
                 <HeaderComponent navigation={this.props.navigation} />
                 <Animated.View style={{
-                        backgroundColor: Colors.green500,
                         width: "60%",
                         height: "8%",
                         borderRadius: 10,
@@ -111,9 +112,9 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                     alignItems: "center",
                     alignSelf: "center",
                     }}>
-                        <Text>Успешно сохранено</Text>
+                        <Text style={{color: Colors.green500}}>Успешно сохранено</Text>
                         <IconButton icon="checkbox-marked-outline"
-                            color={Colors.black}
+                            color={Colors.green500}
                         />
                     </TouchableOpacity>
                 </Animated.View>
@@ -338,6 +339,7 @@ export class TravellComponentFullInfo extends React.Component<Props, State>
                         style={{width: "35%", alignSelf: "center"}}
                         color={Colors.green700}
                         onPress={()=>{
+                            this.refs._scrollView.scrollTo(0);
                             this.fadeOutDialog()
                             this.props.deleteTravel(this.state.index); /// delete and create a new travelling
                             this.props.saveTravel(this.state.travelling);

@@ -13,7 +13,7 @@ export const styles = StyleSheet.create ({
         position: "absolute",
         top: Dimensions.get('screen').height - 200,
         alignSelf: "center",
-        backgroundColor: Colors.purple700,
+        backgroundColor: "#800080",
         width: "65%",
     },
     container: {

@@ -12,6 +12,7 @@ export const userCabinetStyles = StyleSheet.create({
       textDecorationColor: Colors.black,
       width: "80%",
       alignSelf: "center",
+      paddingLeft : 10,
       borderTopColor: Colors.purple700,
       marginTop: 10,
       height : 50,
@@ -29,6 +30,7 @@ export const userCabinetStyles = StyleSheet.create({
         
     },
   dateContainer:{
+    paddingLeft: 10,
     marginTop: 10,
     flexDirection: "row", 
     alignSelf: "center",
