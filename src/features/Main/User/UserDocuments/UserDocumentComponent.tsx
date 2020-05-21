@@ -139,7 +139,7 @@ class UserDocumentComponent extends React.Component<Props>
                                         this.setState({visibleModalScreen : false})
                                         this.setState({documentAdditionalInfo : "", documentName : "",  documentPath : "", documentType : ""})
                                     }}
-                                >Добавить
+                                >Сохранить
                                 </PaperButton>
                             </View>
                         </View>

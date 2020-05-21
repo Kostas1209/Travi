@@ -66,7 +66,7 @@ class MainWindowComponent extends React.Component<Props>
                 </TouchableOpacity>
                 <Text style={{alignSelf: "center"}}>Привет, {this.props.user.name}!</Text>
                 <PaperButton onPress={()=>this.props.navigation.navigate("UserInfo")}>Личная информация</PaperButton>
-                <PaperButton onPress={()=>this.props.navigation.navigate("UserDocument")}>Документи</PaperButton>
+                <PaperButton onPress={()=>this.props.navigation.navigate("UserDocument")}>Документы</PaperButton>
             </View>
         )
     }

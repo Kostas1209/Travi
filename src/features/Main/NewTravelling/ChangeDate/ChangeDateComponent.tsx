@@ -71,13 +71,13 @@ class ChangeDate extends React.Component<Props, State>
         console.log("animation is going")
     }
 
-    testPush = () =>
-    {
-        PushNotification.localNotification({
-            title: "My Notification Title", // (optional)
-            message: "My Notification Message", // (required)
-        });
-    }
+    // testPush = () =>
+    // {
+    //     PushNotification.localNotification({
+    //         title: "My Notification Title", // (optional)
+    //         message: "My Notification Message", // (required)
+    //     });
+    // }
 
     ChangeDate = async (): Promise<Date> =>
     {

@@ -18,14 +18,11 @@ interface RegistrationProps{
 }
 
 interface RegistrationState{
-    fontIsLoading: boolean,
+    
 }
 
 class RegistrationComponent extends React.Component<RegistrationProps, RegistrationState>
 {
-    state = {
-        fontIsLoading: false,
-    }
 
     validationSchema = yup.object().shape({
         email: yup.string()

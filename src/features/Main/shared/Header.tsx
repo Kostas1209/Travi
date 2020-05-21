@@ -46,9 +46,7 @@ const mapStateToProps = (state: RootState) => ({
 
 class HeaderComponent extends React.Component<{navigation, user: User}> 
 {
-    state = {
-        fontIsLoading: true
-    }
+ 
     // async componentDidMount() {
     //     await Font.loadAsync({
     //         'Darkline': require('../../../../assets/fonts/Darkline.ttf'),
@@ -63,8 +61,6 @@ class HeaderComponent extends React.Component<{navigation, user: User}>
     {
         return (
             <View>
-                {
-                    this.state.fontIsLoading ? 
                     <Header 
                         leftComponent={ MyLeftComponent(this.props.navigation) }
                         centerComponent={{onPress:()=>this.props.navigation.navigate("MainScreen"), text: 'Travi', style: { color: Colors.pink100, fontFamily: "Darkline", fontSize: 40} }}
@@ -78,8 +74,7 @@ class HeaderComponent extends React.Component<{navigation, user: User}>
                             </TouchableOpacity>
                         }
                         containerStyle={{paddingTop: 0 ,height: 60,backgroundColor: "#750575"}}
-                    /> : null
-                }
+                    />
             </View>
         )
     }

@@ -18,7 +18,7 @@ interface MapState{
     town: string,
     isButtonVisiable: boolean,
     errorMessage: string,
-    fadeAnim : any
+    fadeAnim : Animated.Value
 }
 
 const INITIAL_STATE : MapState={
@@ -102,6 +102,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
             longitudeDelta: region.longitudeDelta
         }});
     }
+
     onChangeTown(text : string) {
         this.setState({ town: text });
     }
@@ -114,7 +115,7 @@ class TrackingMapWithMarker extends React.Component<{navigation}, MapState>{
                 <View style={{flex:5}}>
                     <TextInput 
                         style={styles.input}
-                        placeholder="Введите город назначения"
+                        placeholder="Введите город"
                         onChangeText={(text) => {
                             this.onChangeTown(text)
                             this.setState({isButtonVisiable: false})
