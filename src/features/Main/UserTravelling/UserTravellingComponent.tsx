@@ -2,13 +2,16 @@ import  * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 import { Travelling } from '../../../types/Travelling';
-import { View, Dimensions, Text } from 'react-native';
+import { Dimensions, Text } from 'react-native';
 import  HeaderComponent from '../shared/Header';
 import { TravellComponentOverview } from '../shared/Travel/Travel';
 
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import { Colors } from 'react-native-paper';
+import { Colors, Button as PaperButton, IconButton } from 'react-native-paper';
+
+const width = Dimensions.get('screen').width
+const heigth = Dimensions.get('screen').height
 
 declare type Props = {
     userTravelling: Travelling[],
@@ -30,7 +33,6 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
         { key: 'current', title: 'Текущие' },
         { key: 'future', title: 'Будущие' },
         { key: 'previous', title: 'Прошлые' },
-        { key: 'add', title: 'Добавить'} 
     ]);
     
     const accordionContent = ( exprassion : (arrive: Date, come: Date , now: Date) => boolean )=>
@@ -89,9 +91,6 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
             return arrive < now && come < now; 
         })
     );
-    const AddRoute = () => {
-        return(<View>{index===3 ? <View>{navigation.navigate("NewTravelling")}{setIndex(0)}</View>: <Text></Text>}</View>)
-    };
     const renderTabBar = props => (
         <TabBar
           {...props}
@@ -108,8 +107,7 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
     const renderScene = SceneMap({
         current: CurrentRoute ,
         future: FutureRoute,
-        previous: PreviousRoute,
-        add: AddRoute
+        previous: PreviousRoute
     });
     return(
         <ScrollView>
@@ -125,6 +123,14 @@ const UserTravelling: React.SFC<Props> = ( {userTravelling, navigation } ) =>
                     onIndexChange={setIndex}
                     initialLayout={initialLayout}
                 />
+                <IconButton
+                    icon="plus-circle-outline"
+                    onPress={()=>navigation.navigate("NewTravelling")}
+                    color="#800080"
+                    size={60}
+                    style={{position: "absolute", top: heigth - 120, left: width - 100}}
+                >
+                </IconButton>
         </ScrollView>
         )
 }
