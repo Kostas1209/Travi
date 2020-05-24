@@ -6,12 +6,14 @@ export const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: 5,
         height: 40,
+        alignSelf: "center",
         paddingLeft: 10,
         paddingTop: 10,
-        width: "70%",
+        maxWidth: "80%",
         fontSize: 18,
-        alignSelf: "center",
         marginTop: 10,
+        borderWidth :2,
+        borderColor: Colors.black
     },
     documentContainer :{
         flexDirection: "row", 
@@ -24,5 +26,10 @@ export const styles = StyleSheet.create({
         paddingTop: 5, 
         paddingBottom: 5, 
         borderRadius: 10
+    },
+    text:{
+        alignSelf:"center",
+        maxWidth: "80%",
+        paddingLeft: 5
     }
 })

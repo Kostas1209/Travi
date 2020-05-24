@@ -1,8 +1,7 @@
 import * as React from 'react';
-import {Text, View, Modal, TouchableOpacity} from 'react-native';
+import {Text, View, Modal, TouchableOpacity, Picker} from 'react-native';
 import  HeaderComponent  from '../../shared/Header';
 import { Button as PaperButton, Colors, IconButton, TextInput as PaperInput} from 'react-native-paper';
-import RNPickerSelect from 'react-native-picker-select';
 import FilePickerManager from 'react-native-file-picker';
 import { styles } from './UserDocumentStyles';
 import { connect } from 'react-redux';
@@ -14,7 +13,7 @@ import FileViewer from 'react-native-file-viewer';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const documentList = [
-    { label: 'Паспорт', value: 'Паспорт', color: Colors.black },
+    { label: 'Паспорт', value: 'Паспорт'},
     { label: 'Загран паспорт', value: 'Загран паспорт' },
     { label: 'Студенческий билети', value: 'Студенческий билети' },
     { label: 'Военный билети', value: 'Военный билети' },
@@ -27,7 +26,8 @@ const documentList = [
 
 const placeholder = {
     label: 'Выберите тип документа',
-    value: null
+    value: null,
+    color: Colors.black
   };
 
 interface Props{
@@ -42,9 +42,9 @@ class UserDocumentComponent extends React.Component<Props>
     state={
         visibleModalScreen : false,
         documentPath : "",
-        documentType : "",
         documentName : "",
-        documentAdditionalInfo : ""
+        documentAdditionalInfo : "",
+        selectedValuePicker: documentList[0].value
     }
     render()
     {
@@ -83,18 +83,18 @@ class UserDocumentComponent extends React.Component<Props>
                 >
                     <View style={{alignSelf: "center",top: "30%", borderColor: Colors.black, borderWidth: 1, backgroundColor : Colors.white, height: "50%", borderRadius: 5}}>
                         <View style={{marginTop: 15}}>
-                            <Text style={{alignSelf: "center"}}>Посадочный билет туда</Text>
-                            <View style={[{flexDirection: "row"},styles.container]}>
+                            <View style={{flexDirection: "row", borderWidth: 1}}>
                                 {
                                     this.state.documentPath !== "" ? 
-                                    <Text>{this.state.documentName}</Text>
+                                    <Text style={styles.text}>{this.state.documentName}</Text>
                                     :
-                                    <Text>
-                                        Не выбрано
+                                    <Text style={styles.text}>
+                                        Путь к документу не выбран
                                     </Text>
                                 }
                                 <IconButton
                                     icon="folder-outline"
+                                    size={35}
                                     onPress={()=>{
                                         FilePickerManager.showFilePicker(null,
                                             (response: { didCancel: any; error: any; uri: any; }) => {
@@ -112,19 +112,28 @@ class UserDocumentComponent extends React.Component<Props>
                                                 }
                                             })
                                     }}
+                                    style={{}}
                                     color={Colors.purple700}
-                                    style={{position:"absolute", top: "0%", left:"70%"}}
                                 />
                             </View>
                             
-                            <RNPickerSelect
-                                onValueChange={(value) => this.setState({documentType : value})}
-                                items={documentList}
-                                placeholder={placeholder}
-                            />
+                            <Picker
+                                style={{width: "80%", alignSelf: "center"}}
+                                selectedValue={this.state.selectedValuePicker}
+                                onValueChange={(itemValue, itemIndex) => this.setState({selectedValuePicker : itemValue}) }
+                            >
+                                {
+                                    documentList.map(
+                                        (item : {value: string, label: string}) => {
+                                            return(
+                                                <Picker.Item label={item.label} value={item.value} />
+                                            )
+                                    })
+                                }
+                            </Picker>
 
-                            <Text>Введите дополнительную информацию</Text>
                             <PaperInput 
+                                placeholder="Введите доп. информацию"
                                 style={{width: "80%", alignSelf: "center"}}
                                 onChangeText={(text)=>{this.setState({documentAdditionalInfo : text})}}
                             />
@@ -135,10 +144,11 @@ class UserDocumentComponent extends React.Component<Props>
                                 >Закрыть</PaperButton>
                                 <PaperButton
                                     onPress={()=>{
-                                        this.props.addDocument({path : this.state.documentPath, documentType : this.state.documentType, additionInfo : this.state.documentAdditionalInfo})
+                                        this.props.addDocument({path : this.state.documentPath, documentType : this.state.selectedValuePicker, additionInfo : this.state.documentAdditionalInfo})
                                         this.setState({visibleModalScreen : false})
                                         this.setState({documentAdditionalInfo : "", documentName : "",  documentPath : "", documentType : ""})
                                     }}
+                                    disabled={this.state.documentPath === "" || this.state.selectedValuePicker===""}
                                 >Сохранить
                                 </PaperButton>
                             </View>

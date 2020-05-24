@@ -33,12 +33,12 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
           .label('Имя')
           .min(2,'Имя минимум 2 буквы')
           .required("Требуется имя")
-          .matches(re, "Имя должно содержать только русские буквы"),
+          .matches(re, "Имя должно содержать только буквы кириллицы"),
         lastName: yup.string()
           .label('Email')
           .min(2,'Фамилия минимум 2 буквы')
           .required("Требуется фамилия")
-          .matches(re, "Фамилия должна содержать только русские буквы"),
+          .matches(re, "Фамилия должна содержать только буквы кириллицы"),
     })
 
 
