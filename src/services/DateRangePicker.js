@@ -5,6 +5,8 @@ import { Button as PaperButton } from 'react-native-paper';
 
 const XDate = require('xdate');
 
+const today = new Date();
+
 type Props = {
   initialRange: React.PropTypes.array.isRequired,
   onSuccess: React.PropTypes.func.isRequired,
@@ -83,7 +85,10 @@ export default class DateRangePicker extends Component<Props> {
                   markingType={'period'}
                   current={this.state.fromDate}
                   markedDates={this.state.markedDates}
-                  onDayPress={(day) => {this.onDayPress(day)}}/>
+                  onDayPress={(day) => {this.onDayPress(day)}}
+                  hideArrows={false}
+                  disableArrowLeft={false}
+                  disableArrowRight={false}/>
         <View style={{flexDirection: "row", alignContent: "space-between", left: "16%" }}>
           <PaperButton title="ОК" style={{width: "40%"}}onPress={() => {
             if(this.state.isFromDatePicked && this.state.isToDatePicked)

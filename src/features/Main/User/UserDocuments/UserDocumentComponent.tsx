@@ -81,9 +81,9 @@ class UserDocumentComponent extends React.Component<Props>
                     transparent={true}
                     visible={this.state.visibleModalScreen}
                 >
-                    <View style={{alignSelf: "center",top: "30%", borderColor: Colors.black, borderWidth: 1, backgroundColor : Colors.white, height: "50%", borderRadius: 5}}>
+                    <View style={{width: "80%", alignSelf: "center",top: "30%", borderColor: Colors.black, borderWidth: 1, backgroundColor : Colors.white, height: "50%", borderRadius: 5}}>
                         <View style={{marginTop: 15}}>
-                            <View style={{flexDirection: "row", borderWidth: 1}}>
+                            <View style={{flexDirection: "row"}}>
                                 {
                                     this.state.documentPath !== "" ? 
                                     <Text style={styles.text}>{this.state.documentName}</Text>
@@ -112,7 +112,6 @@ class UserDocumentComponent extends React.Component<Props>
                                                 }
                                             })
                                     }}
-                                    style={{}}
                                     color={Colors.purple700}
                                 />
                             </View>
