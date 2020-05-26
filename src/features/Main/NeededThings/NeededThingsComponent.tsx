@@ -50,11 +50,11 @@ class NeededThingsComponent extends React.Component<Props>
                                             title={thing.name}
                                             checked={thing.isPicked}
                                             onPress={()=>{
-                                                // let newNeededThings = Object.assign({}, this.state.neededThings);
-                                                // newNeededThings[index] = {name: thing.name, isPicked: !thing.isPicked};
+                                                let newNeededThings = Object.assign({}, this.state.neededThings);
+                                                newNeededThings[index] = {name: thing.name, isPicked: !thing.isPicked};
                                                 // console.log(newNeededThings);
                                                 this.props.changeThing({name: thing.name, isPicked: !thing.isPicked},index)
-                                                // this.setState({neededThings: newNeededThings })
+                                                this.setState({neededThings: newNeededThings })
                                             }}
                                         />
                                         <IconButton 
